@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
 });
 
 const HERO_VIDEO = "/media/nikkita-hero.mp4";
-const VIDEO_POSTER = "/media/nikkita-poster.jpg";
+const VIDEO_POSTER = "/media/Screenshot_20261028_215502_Insta .png";
 
 // ---------- Mobile detection ----------
 function useIsMobile() {
