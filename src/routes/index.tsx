@@ -18,31 +18,47 @@ const VIDEO_POSTER = "/media/nikkita-poster.jpg";
 // ---------- Mobile detection ----------
 function useIsMobile() {
   const [m, setM] = useState(false);
+
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
     const on = () => setM(mq.matches);
+
     on();
     mq.addEventListener("change", on);
+
     return () => mq.removeEventListener("change", on);
   }, []);
+
   return m;
 }
 
 // ---------- Smooth parallax helpers ----------
 function useSmoothScroll() {
   const { scrollY } = useScroll();
-  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
-  const smooth = useSpring(scrollY, { stiffness: 200, damping: 30, mass: 0.2 });
+
+  const isMobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 768px)").matches;
+
+  const smooth = useSpring(scrollY, {
+    stiffness: 200,
+    damping: 30,
+    mass: 0.2,
+  });
+
   return isMobile ? scrollY : smooth;
 }
 
 // ---------- Navbar ----------
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 20);
+
     on();
     window.addEventListener("scroll", on, { passive: true });
+
     return () => window.removeEventListener("scroll", on);
   }, []);
 
@@ -75,9 +91,11 @@ function Navbar() {
         >
           <a href="#home" className="flex items-center gap-2 text-cream group">
             <span className="font-grotesk uppercase text-base tracking-widest group-hover:text-neon transition">
-              Khushi
+              Avin
             </span>
+
             <span className="w-1.5 h-1.5 rounded-full bg-neon shadow-[0_0_12px_#6FFF00] animate-ping" />
+
             <span className="font-condiment text-xs text-neon normal-case hidden sm:inline ml-1">
               birthday edition
             </span>
@@ -114,40 +132,81 @@ function Navbar() {
 // ---------- Hero ----------
 function Hero({ y }: { y: MotionValue<number> }) {
   const isMobile = useIsMobile();
-  const videoY = useTransform(y, (v) => v * (isMobile ? 0.25 : 0.45));
-  const videoScale = useTransform(y, [0, 900], isMobile ? [1.02, 1.12] : [1.05, 1.25]);
-  const videoRotate = useTransform(y, [0, 900], isMobile ? [0, 0] : [0, -2]);
-  const contentY = useTransform(y, (v) => v * (isMobile ? -0.1 : -0.22));
+
+  const videoY = useTransform(
+    y,
+    (v) => v * (isMobile ? 0.25 : 0.45)
+  );
+
+  const videoScale = useTransform(
+    y,
+    [0, 900],
+    isMobile ? [1.02, 1.12] : [1.05, 1.25]
+  );
+
+  const videoRotate = useTransform(
+    y,
+    [0, 900],
+    isMobile ? [0, 0] : [0, -2]
+  );
+
+  const contentY = useTransform(
+    y,
+    (v) => v * (isMobile ? -0.1 : -0.22)
+  );
+
   const contentOpacity = useTransform(y, [0, 500], [1, 0]);
   const contentScale = useTransform(y, [0, 500], [1, 0.94]);
 
   const stagger = {
     hidden: { opacity: 0, y: 24 },
+
     show: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: 0.15 + i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+
+      transition: {
+        delay: 0.15 + i * 0.1,
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
     }),
   } satisfies import("framer-motion").Variants;
 
   const bio =
-    "Happy Birthday to Khushi — celebrating another wonderful chapter filled with smiles, laughter, warm moments, and endless happiness.";
+    "Happy Birthday Avin — not just a friend, but someone who became family. My bada bhai, my constant, and someone I'm genuinely lucky to have in my life.";
 
   return (
-    <section id="home" className="relative min-h-screen w-full overflow-hidden">
+    <section
+      id="home"
+      className="relative min-h-screen w-full overflow-hidden"
+    >
       <motion.div
-        style={{ y: videoY, scale: videoScale, rotate: videoRotate }}
+        style={{
+          y: videoY,
+          scale: videoScale,
+          rotate: videoRotate,
+        }}
         className="absolute inset-0 will-change-transform"
       >
-        <LoopVideo src={HERO_VIDEO} poster={VIDEO_POSTER} className="w-full h-full" priority />
+        <LoopVideo
+          src={HERO_VIDEO}
+          poster={VIDEO_POSTER}
+          className="w-full h-full"
+          priority
+        />
+
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-[#010828]/50 to-[#010828]" />
       </motion.div>
 
       <motion.div
-        style={{ y: contentY, opacity: contentOpacity, scale: contentScale }}
+        style={{
+          y: contentY,
+          opacity: contentOpacity,
+          scale: contentScale,
+        }}
         className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pt-36 sm:pt-44 pb-28 text-center flex flex-col items-center"
       >
-        {/* Birthday Edition Tag */}
         <motion.div
           variants={stagger}
           custom={0}
@@ -156,10 +215,10 @@ function Hero({ y }: { y: MotionValue<number> }) {
           className="inline-flex items-center gap-2 rounded-full liquid-glass px-4 py-1.5 font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-cream/90 border border-neon/30"
         >
           <Sparkles size={12} className="text-neon animate-pulse" />
-          <span>Special Birthday Celebration · 2026</span>
+
+          <span>For my bada bhai · 29.10.2026</span>
         </motion.div>
 
-        {/* Main Birthday Headline */}
         <motion.h1
           variants={stagger}
           custom={1}
@@ -169,12 +228,12 @@ function Hero({ y }: { y: MotionValue<number> }) {
         >
           HAPPY BIRTHDAY
           <br />
+
           <span className="font-condiment normal-case text-neon mix-exclusion -tracking-normal">
-            Khushi
+            Avin
           </span>
         </motion.h1>
 
-        {/* Cursive Subtitle */}
         <motion.p
           variants={stagger}
           custom={2}
@@ -182,35 +241,46 @@ function Hero({ y }: { y: MotionValue<number> }) {
           animate="show"
           className="font-serif-display italic text-cream/80 text-xl sm:text-2xl md:text-3xl mt-2 tracking-wide"
         >
-          celebrating another gorgeous year of joy & dreams
+          some friends somehow become family 🤍
         </motion.p>
 
-        {/* Word-by-word Animated Bio */}
         <motion.p
           initial="hidden"
           animate="show"
-          transition={{ staggerChildren: 0.025, delayChildren: 0.5 }}
+          transition={{
+            staggerChildren: 0.025,
+            delayChildren: 0.5,
+          }}
           className="mt-6 font-mono text-[11px] sm:text-sm uppercase text-cream/70 max-w-xl leading-relaxed flex flex-wrap justify-center gap-x-[0.35em] gap-y-1 px-2"
         >
           {bio.split(" ").map((w, i) => {
             const hot = [
-              "Happy",
               "Birthday",
-              "Khushi",
-              "smiles,",
-              "laughter,",
-              "happiness.",
+              "Avin",
+              "family.",
+              "bhai,",
+              "lucky",
             ].includes(w);
+
             return (
               <motion.span
                 key={i}
                 variants={{
-                  hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
+                  hidden: {
+                    opacity: 0,
+                    y: 12,
+                    filter: "blur(4px)",
+                  },
+
                   show: {
                     opacity: 1,
                     y: 0,
                     filter: "blur(0px)",
-                    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+
+                    transition: {
+                      duration: 0.5,
+                      ease: [0.22, 1, 0.36, 1],
+                    },
                   },
                 }}
                 className={hot ? "text-neon font-bold" : ""}
@@ -221,7 +291,6 @@ function Hero({ y }: { y: MotionValue<number> }) {
           })}
         </motion.p>
 
-        {/* Action Buttons */}
         <motion.div
           variants={stagger}
           custom={3}
@@ -233,21 +302,24 @@ function Hero({ y }: { y: MotionValue<number> }) {
             href="#cake"
             className="inline-flex items-center gap-2 bg-neon text-[#010828] font-grotesk uppercase text-xs sm:text-sm tracking-widest rounded-full px-6 sm:px-7 py-3.5 hover:scale-105 active:scale-95 transition shadow-[0_0_25px_rgba(111,255,0,0.3)] font-semibold"
           >
-            <Cake size={16} /> Blow Candles
+            <Cake size={16} />
+            Blow Candles
           </a>
 
           <button
             onClick={() => triggerBirthdayCelebration()}
             className="liquid-glass inline-flex items-center gap-2 rounded-full px-6 sm:px-7 py-3.5 font-grotesk uppercase text-xs sm:text-sm tracking-widest text-cream hover:text-neon hover:border-neon/40 transition"
           >
-            <PartyPopper size={16} className="text-neon" /> Celebrate
+            <PartyPopper size={16} className="text-neon" />
+            Celebrate
           </button>
 
           <a
             href="#guestbook"
             className="liquid-glass inline-flex items-center gap-2 rounded-full px-6 sm:px-7 py-3.5 font-grotesk uppercase text-xs sm:text-sm tracking-widest text-cream hover:text-neon transition"
           >
-            <MessageSquare size={15} className="text-neon" /> Leave A Wish
+            <MessageSquare size={15} className="text-neon" />
+            Leave A Wish
           </a>
         </motion.div>
       </motion.div>
@@ -261,9 +333,11 @@ function Footer() {
     <footer className="bg-space border-t border-white/5 py-10">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 flex items-center justify-center">
         <div className="font-grotesk uppercase text-cream/80 tracking-widest text-sm flex items-center gap-2">
-          <span>Happy Birthday Khushi</span>
+          <span>Happy Birthday Avin</span>
+
           <span className="w-1 h-1 rounded-full bg-neon" />
-          <span className="text-neon">2026</span>
+
+          <span className="text-neon">29 • 10 • 2026</span>
         </div>
       </div>
     </footer>
@@ -278,22 +352,40 @@ function Index() {
   useEffect(() => {
     const noMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+
       if (target.closest("input, textarea, button, a")) return;
+
       e.preventDefault();
     };
+
     const noCopy = (e: ClipboardEvent) => {
       const target = e.target as HTMLElement;
+
       if (target.closest("input, textarea")) return;
+
       e.preventDefault();
     };
+
     const noKeys = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
+
       if (target.closest("input, textarea")) return;
+
       const k = e.key.toLowerCase();
+
       if (e.key === "F12") return e.preventDefault();
-      if ((e.ctrlKey || e.metaKey) && ["u", "s", "c", "a", "p"].includes(k))
+
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        ["u", "s", "c", "a", "p"].includes(k)
+      )
         return e.preventDefault();
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i", "j", "c"].includes(k))
+
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.shiftKey &&
+        ["i", "j", "c"].includes(k)
+      )
         return e.preventDefault();
     };
 
@@ -301,6 +393,7 @@ function Index() {
     document.addEventListener("copy", noCopy);
     document.addEventListener("cut", noCopy);
     document.addEventListener("keydown", noKeys);
+
     return () => {
       document.removeEventListener("contextmenu", noMenu);
       document.removeEventListener("copy", noCopy);
@@ -310,14 +403,24 @@ function Index() {
   }, []);
 
   return (
-    <main ref={containerRef} className="relative bg-space text-cream overflow-x-hidden">
+    <main
+      ref={containerRef}
+      className="relative bg-space text-cream overflow-x-hidden"
+    >
       <div className="texture-overlay" aria-hidden />
+
       <ConfettiCanvas />
+
       <BirthdayAudioPlayer />
+
       <Navbar />
+
       <Hero y={smoothY} />
+
       <VirtualCake />
+
       <WishWall />
+
       <Footer />
     </main>
   );
